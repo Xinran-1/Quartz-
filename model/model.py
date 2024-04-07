@@ -8,9 +8,9 @@ Tuning HYPER-PARAMETERS should be in test.py file
 ** WARNING **
 
 """
-
 # Import system
 import os
+import math
 
 # Ensure reproducibility
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
@@ -20,11 +20,12 @@ os.environ['PYTHONHASHSEED'] = '42'
 from sklearn.metrics import accuracy_score, recall_score, precision_score, confusion_matrix
 
 # import tensorflow and its dependencies
-from keras import models, layers, optimizers, losses, metrics
+from keras import models, layers, optimizers, losses, metrics, saving, callbacks
 
 # Import data visual library
 import seaborn as sns
 import matplotlib.pyplot as plt
+
 
 class QuartzClassifier:
 
@@ -47,6 +48,7 @@ class QuartzClassifier:
         self.prediction_threshold = prediction_threshold
         self.model = model
         self.history = None
+        self.cp_callback = None
 
     def initialize(self, input_shape):
         """
@@ -70,6 +72,22 @@ class QuartzClassifier:
 
         self.model.summary()
 
+    def set_checkpoint(self, checkpoint_path: str, n_sample: int, saving_rate: int = 5):
+        """
+        Create a check point for train and saving weight for further investigate performance
+        See checkpoint callback usage from tensorflow document for more detail
+        :param n_sample: Number of sample for training
+        :param saving_rate: frequency of saving weight per batch
+        :param checkpoint_path: path for saving weight.
+        """
+        n_batches = math.ceil(n_sample / self.n_batchs)
+
+        # Create a callback that saves the model's weights, put into list
+        self.cp_callback = [callbacks.ModelCheckpoint(filepath=checkpoint_path,
+                                                      save_weights_only=True,
+                                                      save_freq=saving_rate * n_batches,
+                                                      verbose=1)]
+
     def train(self, X_train, X_val, y_train, y_val, verbose=2):
         """
         Train the model
@@ -89,7 +107,8 @@ class QuartzClassifier:
             epochs=self.n_epochs,
             batch_size=self.n_batchs,
             shuffle=False,
-            verbose=verbose
+            verbose=verbose,
+            callbacks=self.cp_callback
         )
 
     def evaluate(self, X_test, y_test):
@@ -151,8 +170,12 @@ class QuartzClassifier:
         :param folder_path_name: path to save_file
         :rtype: None
         """
-        self.model.save(folder_path_name)
+        folder_path_name = folder_path_name + ".keras"
+        saving.save_model(self.model, folder_path_name, overwrite=True)
         print(f"Model saved as: {folder_path_name}")
+
+    def load_model(self, zip_path_name):
+        self.model = saving.load_model(zip_path_name)
 
 
 if __name__ == "__main__":
