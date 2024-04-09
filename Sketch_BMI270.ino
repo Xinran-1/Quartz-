@@ -1,0 +1,60 @@
+/* Read BMI270 sensor via SPI bus
+ *
+ * Copyright (c) 2023 Simon D. Levy
+ *
+ * MIT License
+ *
+ */
+
+#include <SPI.h>
+
+#include "BMI270.h"
+
+static const uint8_t CS_PIN  = 4;
+static const uint8_t INT_PIN = 1 ;
+
+static bool gotInterrupt;
+
+static void handleInterrupt(void)
+{
+    gotInterrupt = false;
+}
+
+static BMI270 imu = BMI270(CS_PIN);
+
+static void printval(const int16_t val, const char * label)
+{
+    Serial.print(label);
+    Serial.print("=");
+    char tmp[10];
+    sprintf(tmp, "%+06d  ", val);
+    Serial.print(tmp);
+}
+
+void setup(void)
+{
+    Serial.begin(115200);
+
+    SPI.begin();
+
+    imu.begin();
+
+    attachInterrupt(INT_PIN, handleInterrupt, RISING);
+}
+
+void loop(void) 
+{
+  imu.readSensor();
+  printval(imu.getRawAccelX(), "ax");
+  printval(imu.getRawAccelY(), "ay");
+  printval(imu.getRawAccelZ(), "az");
+
+  printval(imu.getRawGyroX(), "gx");
+  printval(imu.getRawGyroY(), "gy");
+  printval(imu.getRawGyroZ(), "gz");
+
+  Serial.println();
+    
+
+  delay(10);
+}
