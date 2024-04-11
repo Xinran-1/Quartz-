@@ -41,15 +41,15 @@
 // bandwidth parameters. An error code is returned by setConfig, which can
 // be used to determine whether the selected settings are valid.
 
-#define ACC_RANGE BMI2_ACC_RANGE_8G       // 8G
-#define ACC_ODR BMI2_ACC_ODR_1600HZ       // 1600Hz
-#define ACC_BWP BMI2_ACC_NORMAL_AVG4      // Normal
+#define ACC_RANGE BMI2_ACC_RANGE_16G   // 16G
+#define ACC_ODR BMI2_ACC_ODR_1600HZ   // 1600Hz
+#define ACC_BWP BMI2_ACC_NORMAL_AVG4  // Normal
 
-#define GYRO_RANGE BMI2_GYR_RANGE_1000    // 1000dps
-#define GYRO_ODR BMI2_GYR_ODR_3200HZ      // 3200Hz
-#define GYRO_BWP BMI2_GYR_NORMAL_MODE     // Normal
+#define GYRO_RANGE BMI2_GYR_RANGE_2000  // 2000dps
+#define GYRO_ODR BMI2_GYR_ODR_3200HZ    // 3200Hz
+#define GYRO_BWP BMI2_GYR_NORMAL_MODE   // Normal
 
-#define FILTER_MODE BMI2_PERF_OPT_MODE    // Performance mode
+#define FILTER_MODE BMI2_PERF_OPT_MODE  // Performance mode
 
 #define INT_PIN 4
 
@@ -57,6 +57,8 @@
 #define SCL_1_PIN 13
 #define SDA_2_PIN 11
 #define SCL_2_PIN 14
+
+#define COM_RATE 400000  // 400KHz
 
 
 // Create a new sensor object
@@ -83,8 +85,8 @@ void setup() {
   Serial.begin(921600);
 
   // Initialize the I2C library
-  Wire.begin(SDA_1_PIN, SCL_1_PIN);
-  Wire.begin(SDA_2_PIN, SCL_2_PIN);
+  Wire.begin(SDA_1_PIN, SCL_1_PIN, COM_RATE);
+  Wire.begin(SDA_2_PIN, SCL_2_PIN, COM_RATE);
 
   while (imu_middle_f.beginI2C(i2cAddress1) != BMI2_OK) {
     Serial.println(imu_middle_f.beginI2C(i2cAddress1));
@@ -193,7 +195,7 @@ void loop() {
   // the sensor data, otherwise it will never update
 
   if (interruptOccurred) {
-    
+
     interruptOccurred = false;
 
     imu_middle_f.getSensorData();
