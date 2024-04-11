@@ -196,76 +196,67 @@ void loop() {
     imu_middle_f.getSensorData();
     Serial.print(1);
     // Print acceleration data
-    Serial.print(" Acceleration in g's");
     Serial.print("\t");
-    Serial.print("X: ");
+    Serial.print("AX: ");
     Serial.print(imu_middle_f.data.accelX);
-    Serial.print("Y: ");
+    Serial.print("AY: ");
     Serial.print(imu_middle_f.data.accelY);
-    Serial.print("Z: ");
+    Serial.print("AZ: ");
     Serial.print(imu_middle_f.data.accelZ);
 
     Serial.print("\t");
     Serial.print("\t");
 
     // Print rotation data
-    Serial.print("Rotation in deg/sec");
-    Serial.print("\t");
-    Serial.print("X: ");
+    Serial.print("RX: ");
     Serial.print(imu_middle_f.data.gyroX);
-    Serial.print("Y: ");
+    Serial.print("RY: ");
     Serial.print(imu_middle_f.data.gyroY);
-    Serial.print("Z: ");
+    Serial.print("RZ: ");
     Serial.println(imu_middle_f.data.gyroZ);
 
     imu_index_f.getSensorData();
     Serial.print(2);
     // Print acceleration data
-    Serial.print(" Acceleration in g's");
     Serial.print("\t");
-    Serial.print("X: ");
+    Serial.print("AX: ");
     Serial.print(imu_index_f.data.accelX);
-    Serial.print("Y: ");
+    Serial.print("AY: ");
     Serial.print(imu_index_f.data.accelY);
-    Serial.print("Z: ");
+    Serial.print("AZ: ");
     Serial.print(imu_index_f.data.accelZ);
 
     Serial.print("\t");
     Serial.print("\t");
 
     // Print rotation data
-    Serial.print("Rotation in deg/sec");
-    Serial.print("\t");
-    Serial.print("X: ");
+    Serial.print("RX: ");
     Serial.print(imu_index_f.data.gyroX);
-    Serial.print("Y: ");
+    Serial.print("RY: ");
     Serial.print(imu_index_f.data.gyroY);
-    Serial.print("Z: ");
+    Serial.print("RZ: ");
     Serial.println(imu_index_f.data.gyroZ);
 
     imu_thumb_f.getSensorData();
     Serial.print(3);
     // Print acceleration data
-    Serial.print(" Acceleration in g's");
     Serial.print("\t");
-    Serial.print("X: ");
+    Serial.print("AX: ");
     Serial.print(imu_thumb_f.data.accelX);
-    Serial.print("Y: ");
+    Serial.print("AY: ");
     Serial.print(imu_thumb_f.data.accelY);
-    Serial.print("Z: ");
+    Serial.print("AZ: ");
     Serial.print(imu_thumb_f.data.accelZ);
 
     Serial.print("\t");
     Serial.print("\t");
 
     // Print rotation data
-    Serial.print("Rotation in deg/sec");
-    Serial.print("\t");
-    Serial.print("X: ");
+    Serial.print("RX: ");
     Serial.print(imu_thumb_f.data.gyroX);
-    Serial.print("Y: ");
+    Serial.print("RY: ");
     Serial.print(imu_thumb_f.data.gyroY);
-    Serial.print("Z: ");
+    Serial.print("RZ: ");
     Serial.println(imu_thumb_f.data.gyroZ);
   }
 }
