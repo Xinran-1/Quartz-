@@ -202,9 +202,9 @@ void loop() {
     Serial.print("\t");
     Serial.print("AX: ");
     Serial.print(imu_middle_f.data.accelX);
-    Serial.print("AY: ");
+    Serial.print(" AY: ");
     Serial.print(imu_middle_f.data.accelY);
-    Serial.print("AZ: ");
+    Serial.print(" AZ: ");
     Serial.print(imu_middle_f.data.accelZ);
 
     Serial.print("\t");
@@ -213,9 +213,9 @@ void loop() {
     // Print rotation data
     Serial.print("RX: ");
     Serial.print(imu_middle_f.data.gyroX);
-    Serial.print("RY: ");
+    Serial.print(" RY: ");
     Serial.print(imu_middle_f.data.gyroY);
-    Serial.print("RZ: ");
+    Serial.print(" RZ: ");
     Serial.println(imu_middle_f.data.gyroZ);
 
     imu_index_f.getSensorData();
@@ -224,9 +224,9 @@ void loop() {
     Serial.print("\t");
     Serial.print("AX: ");
     Serial.print(imu_index_f.data.accelX);
-    Serial.print("AY: ");
+    Serial.print(" AY: ");
     Serial.print(imu_index_f.data.accelY);
-    Serial.print("AZ: ");
+    Serial.print(" AZ: ");
     Serial.print(imu_index_f.data.accelZ);
 
     Serial.print("\t");
@@ -235,9 +235,9 @@ void loop() {
     // Print rotation data
     Serial.print("RX: ");
     Serial.print(imu_index_f.data.gyroX);
-    Serial.print("RY: ");
+    Serial.print(" RY: ");
     Serial.print(imu_index_f.data.gyroY);
-    Serial.print("RZ: ");
+    Serial.print(" RZ: ");
     Serial.println(imu_index_f.data.gyroZ);
 
     imu_thumb_f.getSensorData();
@@ -246,9 +246,9 @@ void loop() {
     Serial.print("\t");
     Serial.print("AX: ");
     Serial.print(imu_thumb_f.data.accelX);
-    Serial.print("AY: ");
+    Serial.print(" AY: ");
     Serial.print(imu_thumb_f.data.accelY);
-    Serial.print("AZ: ");
+    Serial.print(" AZ: ");
     Serial.print(imu_thumb_f.data.accelZ);
 
     Serial.print("\t");
@@ -257,9 +257,9 @@ void loop() {
     // Print rotation data
     Serial.print("RX: ");
     Serial.print(imu_thumb_f.data.gyroX);
-    Serial.print("RY: ");
+    Serial.print(" RY: ");
     Serial.print(imu_thumb_f.data.gyroY);
-    Serial.print("RZ: ");
+    Serial.print(" RZ: ");
     Serial.println(imu_thumb_f.data.gyroZ);
   }
 }
