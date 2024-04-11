@@ -41,17 +41,22 @@
 // bandwidth parameters. An error code is returned by setConfig, which can
 // be used to determine whether the selected settings are valid.
 
-#define ACC_RANGE BMI2_ACC_RANGE_8G
-#define ACC_ODR BMI2_ACC_ODR_1600HZ
-#define ACC_BWP BMI2_ACC_NORMAL_AVG4
+#define ACC_RANGE BMI2_ACC_RANGE_8G       // 8G
+#define ACC_ODR BMI2_ACC_ODR_1600HZ       // 1600Hz
+#define ACC_BWP BMI2_ACC_NORMAL_AVG4      // Normal
 
-#define GYRO_RANGE BMI2_GYR_RANGE_1000
-#define GYRO_ODR BMI2_GYR_ODR_3200HZ
-#define GYRO_BWP BMI2_GYR_NORMAL_MODE
+#define GYRO_RANGE BMI2_GYR_RANGE_1000    // 1000dps
+#define GYRO_ODR BMI2_GYR_ODR_3200HZ      // 3200Hz
+#define GYRO_BWP BMI2_GYR_NORMAL_MODE     // Normal
 
-#define FILTER_MODE BMI2_PERF_OPT_MODE
+#define FILTER_MODE BMI2_PERF_OPT_MODE    // Performance mode
 
 #define INT_PIN 4
+
+#define SDA_1_PIN 12
+#define SCL_1_PIN 13
+#define SDA_2_PIN 11
+#define SCL_2_PIN 14
 
 
 // Create a new sensor object
@@ -76,11 +81,10 @@ void handleInterrupt() {
 void setup() {
   // Start serial
   Serial.begin(921600);
-  Serial.println("Start Quartz");
 
   // Initialize the I2C library
-  Wire.begin(12, 13);
-  Wire.begin(11, 14);
+  Wire.begin(SDA_1_PIN, SCL_1_PIN);
+  Wire.begin(SDA_2_PIN, SCL_2_PIN);
 
   while (imu_middle_f.beginI2C(i2cAddress1) != BMI2_OK) {
     Serial.println(imu_middle_f.beginI2C(i2cAddress1));
@@ -139,7 +143,6 @@ void setup() {
   gyroConfig.cfg.gyr.odr = GYRO_ODR;
   gyroConfig.cfg.gyr.bwp = GYRO_BWP;
   gyroConfig.cfg.gyr.filter_perf = FILTER_MODE;
-  gyroConfig.cfg.gyr.ois_range = BMI2_GYR_OIS_250;
   gyroConfig.cfg.gyr.range = GYRO_RANGE;
   gyroConfig.cfg.gyr.noise_perf = FILTER_MODE;
   while (imu_middle_f.setConfig(gyroConfig) != BMI2_OK) {
@@ -182,7 +185,7 @@ void setup() {
 
   Serial.println("Settup interuptpin valid! Beginning measurements");
 
-  delay(10);
+  delay(1);
 }
 
 void loop() {
