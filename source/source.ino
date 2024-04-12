@@ -41,7 +41,7 @@
 // bandwidth parameters. An error code is returned by setConfig, which can
 // be used to determine whether the selected settings are valid.
 
-#define ACC_RANGE BMI2_ACC_RANGE_16G   // 16G
+#define ACC_RANGE BMI2_ACC_RANGE_16G  // 16G
 #define ACC_ODR BMI2_ACC_ODR_1600HZ   // 1600Hz
 #define ACC_BWP BMI2_ACC_NORMAL_AVG4  // Normal
 
@@ -68,6 +68,11 @@ BMI270 imu_thumb_f;
 
 bmi2_sens_config accelConfig;
 bmi2_sens_config gyroConfig;
+
+// Seting global variable
+unsigned long waitingTimeBeforePowerDown = 30000;  // 30 seconds
+unsigned long delayTimeForwaiting = 0;
+unsigned long startTime = 0;
 
 // I2C address selection
 uint8_t i2cAddress1 = BMI2_I2C_PRIM_ADDR;  // 0x68
@@ -166,11 +171,11 @@ void setup() {
   Serial.println("Configuration valid!");
 
   // Initialize interupt pin
+  struct bmi2_int_pin_config interruptConfig;
+
   imu_middle_f.mapInterruptToPin(BMI2_DRDY_INT, BMI2_INT1);
   imu_index_f.mapInterruptToPin(BMI2_DRDY_INT, BMI2_INT1);
   imu_thumb_f.mapInterruptToPin(BMI2_DRDY_INT, BMI2_INT1);
-
-  struct bmi2_int_pin_config interruptConfig;
 
   interruptConfig.pin_type = BMI2_INT1;
   interruptConfig.int_latch = BMI2_INT_NON_LATCH;
@@ -188,12 +193,18 @@ void setup() {
   Serial.println("Settup interuptpin valid! Beginning measurements");
 
   delay(1);
+
+  // Setting up the waitingTime
+  delayTimeForwaiting = esp_timer_get_time();
 }
 
 void loop() {
+
+  // Update timer
+  startTime = esp_timer_get_time();
+
   // Get measurements from the sensor. This must be called before accessing
   // the sensor data, otherwise it will never update
-
   if (interruptOccurred) {
 
     interruptOccurred = false;
@@ -263,5 +274,12 @@ void loop() {
     Serial.print(imu_thumb_f.data.gyroY);
     Serial.print(" RZ: ");
     Serial.println(imu_thumb_f.data.gyroZ);
+
+    delayTimeForwaiting = esp_timer_get_time();
+  }
+
+  // Enter saving power after time
+  if (delayTimeForwaiting - startTime > waitingTimeBeforePowerDown) {
+    // do something
   }
 }
