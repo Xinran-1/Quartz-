@@ -11,6 +11,8 @@ numpy = "*"
 opencv-python = "*"
 matplotlib = "*"
 seaborn = "*"
+serial = "*"
+keyboard = "*"
 
 [dev-packages]
 
