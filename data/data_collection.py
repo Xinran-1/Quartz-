@@ -5,10 +5,10 @@ import keyboard
 
 # Open serial port for receiving data from Arduino
 # ser = serial.Serial('COM6', 921600, timeout=1)
-ser = serial.Serial('COM6', 921600, timeout=1)
+ser = serial.Serial('COM7', 921600, timeout=1)
 
 # Create a CSV file
-csv_file_path = 'data1.csv'
+csv_file_path = 'python1.csv'
 
 # Open file for data logging+
 file = open(csv_file_path, "w", newline='')
@@ -16,12 +16,7 @@ csv_writer = csv.writer(file)
 
 try:
     # Write CSV header with Timestamp, sensor data, label and sep columns
-    csv_header = ["Timestamp", "mid_Acceleration_X", "mid_Acceleration_Y", "mid_Acceleration_Z",
-                  "mid_Rotation_X", "mid_Rotation_Y", "mid_Rotation_Z",
-                  "ind_Acceleration_X", "ind_Acceleration_Y", "ind_Acceleration_Z",
-                  "ind_Rotation_X", "ind_Rotation_Y", "ind_Rotation_Z",
-                  "thb_Acceleration_X", "thb_Acceleration_Y", "thb_Acceleration_Z",
-                  "thb_Rotation_X", "thb_Rotation_Y", "thb_Rotation_Z",
+    csv_header = ["Timestamp", "data",
                   "Label", "Sep"]
     csv_writer.writerow(csv_header)
 
@@ -38,18 +33,18 @@ try:
         return cleaned_numbers
 
     while True:
-        data_row = []
         # Read data from Arduino
-        for _ in range(3):
-            line = ser.readline().decode().strip()
-            data = line.strip("'").split("\t\t")
-            data = [clean_and_join_numbers(data_str) for data_str in data]
-            print(len(data))
-            if len(data) == 6:
-                data_row.extend(data)
-            print(data)
+        # for _ in range(3):
+        line = ser.readline().decode().strip()
+        data = line.strip("'").split("\t\t")
+        data_row = [clean_and_join_numbers(data_str) for data_str in data]
+        # print(len(data))
 
-        if len(data_row) == 18:  # Ensure we have exactly 6 sensor values
+        # if len(data) == 1:
+        #     data_row.extend(data)
+        print(data_row)
+
+        if len(data_row) == 1:  # Ensure we have exactly 6 sensor values
             # Get current timestamp1
             current_timestamp = datetime.now().strftime('%H:%M:%S.%f')
 
