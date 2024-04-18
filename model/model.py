@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 class QuartzClassifier:
 
     def __init__(self, output_unit=3, drop_out_rate=0.5,
-                 learning_rate=0.001, n_epochs=10, n_batchs=32, prediction_threshold=0.5, model=None):
+                 learning_rate=0.001, n_epochs=10, n_batchs=16, prediction_threshold=0.5, model=None):
         """
         :type prediction_threshold: object
         :param output_unit: number of classification output
@@ -68,7 +68,7 @@ class QuartzClassifier:
 
         self.model.compile(optimizer=optimizers.SGD(learning_rate=self.learning_rate),
                            loss=losses.CategoricalCrossentropy(),
-                           metrics=[metrics.CategoricalAccuracy()])
+                           metrics=['accuracy'])
 
         self.model.summary()
 
@@ -119,18 +119,20 @@ class QuartzClassifier:
         :rtype: tuple
         :return: accuracy score, recall score, precision score
         """
-        test_loss, test_accuracy = self.model.evaluate(X_test, y_test, verbose=2)
+        test_loss, test_accuracy = self.model.evaluate(X_test, y_test, batch_size=16, verbose=2)
 
         print(f"Test lost: {test_loss}")
         print(f"Test accuracy: {test_accuracy}")
 
-        y_pred = self.model.predict(X_test)
+        y_pred = self.model.predict(X_test, batch_size = 16,verbose = 2)
 
-        accuracy = accuracy_score(y_test, y_pred)
-        recall = recall_score(y_test, y_pred)
-        precision = precision_score(y_test, y_pred)
+        print(y_pred)
 
-        return accuracy, recall, precision
+        # accuracy = accuracy_score(y_test, y_pred)
+        # recall = recall_score(y_test, y_pred)
+        # precision = precision_score(y_test, y_pred)
+
+        return
 
     def plot_history(self):
         """
@@ -141,7 +143,7 @@ class QuartzClassifier:
             raise Exception("No training history found. Train the model first.")
 
         plt.plot(self.history.history['accuracy'], label='accuracy')
-        plt.plot(self.history.history['val_accuracy'], label='val_accuracy')
+        plt.plot(self.history.history['val_accuracy'], label='val_categorical_accuracy')
         plt.xlabel('Epoch')
         plt.ylabel('Accuracy')
         plt.ylim([0, 1])
