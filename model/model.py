@@ -177,6 +177,7 @@ class QuartzClassifier:
         print(f"Model saved as: {folder_path_name}")
 
     def load_model(self, zip_path_name):
+
         self.model = saving.load_model(zip_path_name)
 
 

@@ -46,6 +46,7 @@ model.train(X_train, X_val, y_train, y_val)
 # Evaluate the model
 model.evaluate(X_test, y_test)
 
+
 # Plot training history
 model.plot_history()
 
