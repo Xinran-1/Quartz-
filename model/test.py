@@ -12,34 +12,8 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 
 
-def generate_sparse_array(size=(2000, 3)):
-    """
-    Generate a numpy array with 2000 rows and 3 columns, where each row contains only one number 1
-    and the other two numbers are zeros, randomly distributed.
-
-    Parameters:
-        size (tuple): Size of the array in the format (rows, columns).
-
-    Returns:
-        numpy.ndarray: The generated sparse array.
-    """
-    # Create an array filled with zeros
-    array = np.zeros(size)
-
-    # Randomly choose the indices to place the number 1 in each row
-    row_indices = np.random.choice(size[0], size=size[0], replace=False)
-    col_indices = np.random.choice(size[1], size=size[0])
-
-    # Set the values to 1 at the chosen indices
-    array[row_indices, col_indices] = 1
-
-    return array
-
-
 X = np.random.random((1000, 20, 1))
-y = generate_sparse_array((1000, 3))
-
-print(y)
+y = np.random.randint(2, size=(1000, 3))
 
 
 def drop_remain(X,y):
@@ -66,7 +40,6 @@ X_val, y_val = drop_remain(X_val, y_val)
 model = QuartzClassifier(output_unit=3, n_batchs=16)
 
 # Initialize and train the model (assuming X and y are already defined and preprocessed)
-
 model.initialize(input_shape=X_test.shape[1:])
 model.train(X_train, X_val, y_train, y_val)
 
@@ -77,11 +50,7 @@ model.evaluate(X_test, y_test)
 model.plot_history()
 
 # Plot confusion matrix
-
-y_pred = model.model.predict(X_test,batch_size = 16,verbose = 2)  # Assuming you have a test set ready
-print(y_pred.shape)
-print(X_test.shape)
-print(y_test.shape)
+y_pred = model.model.predict(X_test)  # Assuming you have a test set ready
 model.plot_confusion_matrix(y_test, y_pred)
 
 # Save the model
