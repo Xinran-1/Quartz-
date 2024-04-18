@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 class QuartzClassifier:
 
     def __init__(self, output_unit=3, drop_out_rate=0.5,
-                 learning_rate=0.001, n_epochs=10, n_batchs=32, prediction_threshold=0.5, model=None):
+                 learning_rate=0.001, n_epochs=10, n_batchs=16, prediction_threshold=0.5, model=None):
         """
         :type prediction_threshold: object
         :param output_unit: number of classification output
@@ -61,9 +61,9 @@ class QuartzClassifier:
             layers.LSTM(units=128, stateful=True, return_sequences=True),
             layers.LSTM(units=64, stateful=True, return_sequences=True),
             layers.LSTM(units=64, stateful=True, return_sequences=False),
-            layers.Dense(units=32, activation='relu'),
+            layers.Dense(units=32),
             layers.Dropout(self.drop_out_rate),
-            layers.Dense(self.output_unit, activation='softmax')
+            layers.Dense(self.output_unit)
         ])
 
         self.model.compile(optimizer=optimizers.SGD(learning_rate=self.learning_rate),
@@ -119,16 +119,19 @@ class QuartzClassifier:
         :rtype: tuple
         :return: accuracy score, recall score, precision score
         """
-        test_loss, test_accuracy = self.model.evaluate(X_test, y_test, verbose=2)
+        test_loss, test_accuracy = self.model.evaluate(X_test, y_test, batch_size=self.n_batchs, verbose=2)
 
         print(f"Test lost: {test_loss}")
         print(f"Test accuracy: {test_accuracy}")
 
-        y_pred = self.model.predict(X_test)
+        y_pred = self.model.predict(X_test, batch_size=self.n_batchs, verbose=2)
+
+        print(y_pred)
+        print(y_test)
 
         accuracy = accuracy_score(y_test, y_pred)
-        recall = recall_score(y_test, y_pred)
-        precision = precision_score(y_test, y_pred)
+        recall = recall_score(y_test, y_pred, average='binary')
+        precision = precision_score(y_test, y_pred, average='binary')
 
         return accuracy, recall, precision
 
